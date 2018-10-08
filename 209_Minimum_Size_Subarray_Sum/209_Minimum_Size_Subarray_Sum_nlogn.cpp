@@ -5,6 +5,9 @@ using namespace std;
 class Solution {
 private:
     int binarySearch(vector<int>& sums, int target, int start, int right) {
+        if(sums[right] < target) {
+            return sums.size();
+        }
         int left = start;
         while(left + 1 < right) {
             int mid = left + (right - left) / 2;
@@ -16,9 +19,7 @@ private:
                 left = mid;
             }
         }
-        if(sums[right] < target) {
-            return sums.size();
-        } else if(sums[left] >= target) {
+        if(sums[left] >= target) {
             return left - start;
         } else {
             return right - start;
@@ -32,6 +33,9 @@ public:
         for(int i = 1; i < n + 1; i++) {
             sums[i] = sums[i - 1] + nums[i - 1];
         }
+        if(sums[n] < s) {
+            return 0;
+        }
         for(int i = 0; i < n; i++) {
             int temp = binarySearch(sums, s + sums[i], i, n);
             if(temp == 1) {
@@ -41,11 +45,7 @@ public:
                 result = temp;
             }
         }
-        if(result == n + 1) {
-            return 0;
-        } else {
-            return result;
-        }
+        return result;
     }
 };
 
