@@ -20,7 +20,7 @@ public:
                 int operand1 = st.top();
                 st.pop();
                 st.pop();
-                while(!st.empty() && st.top() != -3) {
+                if(!st.empty() && st.top() != -3) {
                     int temp = st.top();
                     st.pop();
                     int operand2 = st.top();
