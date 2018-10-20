@@ -47,30 +47,26 @@ public:
             head = new doubleListNode(value, key);
             tail = head;
             size++;
-        } else if(max_size == 1) {
-            if(m.count(key)) {
-                head -> val = value;
-            } else {
+        } else if(m.count(key)) {
+            if(m[key] != head) {
+                if(m[key] == tail) {
+                    m[key] -> left -> right = NULL;
+                    tail = m[key] -> left;
+                } else {
+                    m[key] -> left -> right = m[key] -> right;
+                    m[key] -> right -> left = m[key] -> left;
+                }
+                m[key] -> left = NULL;
+                m[key] -> right = head;
+                head -> left = m[key];
+                head = m[key];
+            }
+            m[key] -> val = value;
+        } else {
+            if(max_size == 1) {
                 m.erase(m.find(head -> k));
                 delete head;
                 head = new doubleListNode(value, key);
-            }
-        } else {
-            if(m.count(key)) {
-                if(m[key] != head) {
-                    if(m[key] == tail) {
-                        m[key] -> left -> right = NULL;
-                        tail = m[key] -> left;
-                    } else {
-                        m[key] -> left -> right = m[key] -> right;
-                        m[key] -> right -> left = m[key] -> left;
-                    }
-                    m[key] -> left = NULL;
-                    m[key] -> right = head;
-                    head -> left = m[key];
-                    head = m[key];
-                }
-                m[key] -> val = value;
             } else if(size < max_size) {
                 doubleListNode* p = new doubleListNode(value, key);
                 p -> right = head;
