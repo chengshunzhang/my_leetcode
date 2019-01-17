@@ -19,4 +19,4 @@ I think the operation is invalid if followerId == followeeId.
 For a valid operation, simply insert the followeeId to userFollows.  
 
 ## unfollow  
-First check whether the followerId has any followees and then whether the followeeId is in the followerId's followees' set.
+First check whether the followerId has any followees and then whether the followeeId is in the followerId's followees' set. If so, simply erase it in the set.
