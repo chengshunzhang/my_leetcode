@@ -11,42 +11,28 @@ struct ListNode {
 class Solution {
 public:
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-        ListNode* p = l1, * q = l2, * result = NULL, * result_pt = NULL;
-        int sum, carry = 0, add;
-        while(p != NULL && q != NULL) {
-            sum = p -> val + q -> val + carry;
-            carry = sum / 10;
-            add = sum % 10;
-            if(result == NULL) {
-                result = new ListNode(add);
-                result_pt = result;
-            } else {
-                result_pt -> next = new ListNode(add);
-                result_pt = result_pt -> next;
+        ListNode* p = l1, * q = l2, * dummy = new ListNode(0), * result_ptr = dummy;
+        int carry = 0, add;
+        while(p || q) {
+            int sum = 0;
+            if(p) {
+                sum += p -> val;
+                p = p -> next;
             }
-            p = p -> next;
-            q = q -> next;
-        }
-        while(p != NULL) {
-            sum = p -> val + carry;
-            carry = sum / 10;
+            if(q) {
+                sum += q -> val;
+                q = q -> next;
+            }
+            sum += carry;
             add = sum % 10;
-            result_pt -> next = new ListNode(add);
-            result_pt = result_pt -> next;
-            p = p -> next;
-        }
-        while(q != NULL) {
-            sum = q -> val + carry;
             carry = sum / 10;
-            add = sum % 10;
-            result_pt -> next = new ListNode(add);
-            result_pt = result_pt -> next;
-            q = q -> next;
+            result_ptr -> next = new ListNode(add);
+            result_ptr = result_ptr -> next;
         }
         if(carry) {
-            result_pt -> next = new ListNode(carry);
+            result_ptr -> next = new ListNode(carry);
         }
-        return result;
+        return dummy -> next;
     }
 };
 
