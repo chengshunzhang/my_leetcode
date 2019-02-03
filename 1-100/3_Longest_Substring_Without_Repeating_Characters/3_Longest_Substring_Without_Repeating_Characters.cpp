@@ -6,23 +6,20 @@ using namespace std;
 class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
-        int result = 0, temp = 0, start = 0, re_pos;
-        unordered_map<char, int> m;
+        int result = 0, curLen = 0, start = 0, pos;
+        unordered_map<char, int> hash;
         for(int i = 0; i < s.size(); i++) {
-            if(m.count(s[i]) && (re_pos = m.find(s[i]) -> second) >= start) {
-                if(result < temp) {
-                    result = temp;
+            if(hash.count(s[i]) && (pos = hash[s[i]]) >= start) {
+                if(result < curLen) {
+                    result = curLen;
                 }
-                temp = temp - (re_pos - start) - 1;
-                start = re_pos + 1;
+                curLen = curLen - (pos - start) - 1;
+                start = pos + 1;
             }
-            m[s[i]] = i;
-            temp++;
+            hash[s[i]] = i;
+            curLen++;
         }
-        if(result < temp) {
-            result = temp;
-        }
-        return result;
+        return max(result, curLen);
     }
 };
 
