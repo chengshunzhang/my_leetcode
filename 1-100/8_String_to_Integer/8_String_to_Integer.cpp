@@ -3,44 +3,40 @@
 using namespace std;
 
 class Solution {
+private:
+    bool isDigit(char c) {
+        return c >= '0' && c <= '9';
+    }
 public:
     int myAtoi(string str) {
-        int i = 0, result;
-        while(i < str.size()) {
-            if(str[i] == ' ')
-                i++;
-            else if(str[i] == '0' && i < str.size() - 1 && str[i + 1] - '0' >= '0' && str[i + 1] - '0' <= '9')
-            	i++;
-            else if(str[i] == '+' || str[i] == '-' || (str[i] - '0' > 0 && str[i] - '0' <= 9)){
-                int start, end;
-                if(str[i] == '+' || str[i] == '-') {
-                    start = i + 1;
-                    while(str[start] == '0')
-                    	start++;
-                }
-                else
-                    start = i;
-                end = start;
-                while(str[end] - '0' >= 0 && str[end] - '0' <= 9)
-                    end++;
-                string s(str, start, end - start);
-                uint max_n = (uint)1 << 31;
-                int max_p = max_n - 1;
-                string sn = to_string(max_n), sp = to_string(max_p);
-                if(s.size() > sn.size())
-                    return str[i] == '-' ? -max_n : max_p;
-                if(s.size() == sn.size()) {
-                    if(s > sp && str[i] != '-')
-                        return max_p;
-                    if(s > sn && str[i] == '-')
-                    	return -max_n;
-                }
-                return str[i] == '-' ? -atoi(s.c_str()) : atoi(s.c_str());
-            }
-            else
-                return 0;
+        bool negative = false;
+        int start = 0, n = str.size();
+        while(start < n && str[start] == ' ') {
+            start++;
         }
-        return 0;
+        if(start < n && (str[start] == '-' || str[start] == '+')) {
+            if(str[start] == '-') {
+                negative = true;
+            }
+            start++;
+        }
+        if(start == n || !isDigit(str[start])) {
+            return 0;
+        }
+        int sum = 0;
+        while(start < n && isDigit(str[start])) {
+            if(sum > 0 && INT_MAX / sum < 10) {
+                return negative ? INT_MIN : INT_MAX;
+            }
+            if(sum > 0 && INT_MAX / sum == 10 &&
+               INT_MAX - sum * 10 < str[start] - '0') {
+                return negative ? INT_MIN : INT_MAX;
+            }
+            int temp = str[start] - '0';
+            sum = sum * 10 + temp;
+            start++;
+        }
+        return negative ? -sum : sum;
     }
 };
 
