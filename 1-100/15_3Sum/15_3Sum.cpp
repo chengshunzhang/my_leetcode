@@ -5,35 +5,42 @@ using namespace std;
 
 class Solution {
 public:
-	vector< vector<int> > threeSum(vector<int>& nums) {
-		vector< vector<int> > result;
-		if (nums.size() < 3)
-			return result;
+	vector<vector<int>> threeSum(vector<int>& nums) {
+		vector<vector<int>> result;
+		if(nums.size() < 3) {
+            return result;
+        }
 		sort(nums.begin(), nums.end());
-		int i = 0;
-		while(i < nums.size() - 2) {
+        if(nums[0] > 0 || nums.back() < 0) {
+            return result;
+        }
+		for(int i = 0; i < nums.size() - 2; i++) {
+			if(nums[i] + nums[i + 1] + nums[i + 2] > 0) {
+                break;
+            }
+            if(nums[i] + nums[nums.size() - 1] + nums[nums.size() - 2] < 0) {
+                continue;
+            }
 			int target = -nums[i], left = i + 1, right = nums.size() - 1;
-			while (left < right) {
-				if (nums[left] + nums[right] == target) {
-					vector<int> temp;
-					temp.push_back(nums[i]); temp.push_back(nums[left]); temp.push_back(nums[right]);
-					result.push_back(temp);
+			while(left < right) {
+				if(nums[left] + nums[right] == target) {
+					result.push_back({nums[i], nums[left], nums[right]});
 					left++;
-					while (nums[left] == nums[left - 1])
-						left++;
+					while(left < right && nums[left] == nums[left - 1]) {
+                        left++;
+                    }
 					right--;
-					while (nums[right] == nums[right + 1])
-						right--;
-				}
-				else if (nums[left] + nums[right] < target) {
+					while (right > left && nums[right] == nums[right + 1]) {
+                       right--; 
+                    }
+				} else if(nums[left] + nums[right] < target) {
 					left++;
-				}
-				else
+				} else
 					right--;
 			}
-			i++;
-			while(nums[i] == nums[i - 1])
-				i++;
+            while(i < nums.size() - 2 && nums[i] == nums[i + 1]) {
+                i++;
+            }
 		}
 		return result;
 	}
