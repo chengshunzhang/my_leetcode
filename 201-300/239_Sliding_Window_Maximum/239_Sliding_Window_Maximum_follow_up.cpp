@@ -6,37 +6,30 @@ using namespace std;
 class Solution {
 public:
     vector<int> maxSlidingWindow(vector<int>& nums, int k) {
-        int n = nums.size();
-        if(n == 0) {
-            return vector<int> ();
-        }
-        vector<int> result(n - k + 1);
-        deque<int> dq;
-        dq.push_back(0);
-        for(int i = 1; i < k; i++) {
-            while(!dq.empty() && nums[i] > nums[dq.back()]) {
-                dq.pop_back();
+        vector<int> result;
+        deque<int> pos;
+        for(int i = 0; i < nums.size(); i++) {
+            if(pos.empty() || nums[i] >= nums[pos.back()]) {
+                pos.push_back(i);
+            } else {
+                while(!pos.empty() && nums[i] > nums[pos.front()]) {
+                    pos.pop_front();
+                }
+                pos.push_front(i);
             }
-            dq.push_back(i);
-        }
-        for(int i = k; i < n; i++) {
-            result[i - k] = nums[dq.front()];
-            if(dq.front() == i - k) {
-                dq.pop_front();
+            while(pos.back() < i + 1 - k) {
+                pos.pop_back();
             }
-            while(!dq.empty() && nums[i] > nums[dq.back()]) {
-                dq.pop_back();
+            if(i >= k - 1) {
+                result.push_back(nums[pos.back()]);
             }
-            dq.push_back(i);
         }
-        result[n - k] = nums[dq.front()];
         return result;
     }
 };
 
 int main() {
-    int n[] = {1,3,-1,-3,5,3,6,7};
-    vector<int> nums(n,n+8);
+    vector<int> nums = {1,3,-1,-3,5,3,6,7};
     Solution s;
     vector<int> res = s.maxSlidingWindow(nums, 3);
     for(int i = 0; i < res.size(); i++) {
